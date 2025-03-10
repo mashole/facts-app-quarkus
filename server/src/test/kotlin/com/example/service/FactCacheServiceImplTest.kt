@@ -19,11 +19,11 @@ class FactCacheServiceImplTest {
 
     @Test
     fun `test cacheFact when fact is new`() {
-        val cacheSizeBefore = factCacheService.getAllCachedFacts().size
+        val cacheSizeBefore = factCacheService.getAllCachedFacts().await().indefinitely().size
 
         factCacheService.cacheFact(fact)
 
-        val cacheSizeAfter = factCacheService.getAllCachedFacts().size
+        val cacheSizeAfter = factCacheService.getAllCachedFacts().await().indefinitely().size
         assertEquals(cacheSizeBefore + 1, cacheSizeAfter)
 
         assertNotNull(factCacheService.getCachedFact(fact.id))
@@ -33,10 +33,10 @@ class FactCacheServiceImplTest {
     fun `test cacheFact when fact already cached`() {
         factCacheService.cacheFact(fact)
 
-        val accessCountBefore = factCacheService.getCachedFact(fact.id)?.accessCount
+        val accessCountBefore = factCacheService.getCachedFact(fact.id).await()?.indefinitely()?.accessCount
         factCacheService.cacheFact(fact)
 
-        val accessCountAfter = factCacheService.getCachedFact(fact.id)?.accessCount
+        val accessCountAfter = factCacheService.getCachedFact(fact.id).await()?.indefinitely()?.accessCount
         assertNotNull(accessCountAfter)
         assertEquals(accessCountBefore!! + 1, accessCountAfter)
     }
@@ -45,10 +45,10 @@ class FactCacheServiceImplTest {
     fun `test incrementAccessCount`() {
         factCacheService.cacheFact(fact)
 
-        val accessCountBefore = factCacheService.getCachedFact(fact.id)?.accessCount
+        val accessCountBefore = factCacheService.getCachedFact(fact.id).await()?.indefinitely()?.accessCount
         factCacheService.incrementAccessCount(fact.id)
 
-        val accessCountAfter = factCacheService.getCachedFact(fact.id)?.accessCount
+        val accessCountAfter = factCacheService.getCachedFact(fact.id).await()?.indefinitely()?.accessCount
         assertNotNull(accessCountAfter)
         assertEquals(accessCountBefore!! + 1, accessCountAfter)
     }
@@ -60,7 +60,7 @@ class FactCacheServiceImplTest {
         factCacheService.cacheFact(fact2)
 
         val allFacts = factCacheService.getAllCachedFacts()
-        assertEquals(2, allFacts.size)
+        assertEquals(2, allFacts.await().indefinitely().size)
     }
 
     @Test
@@ -69,6 +69,6 @@ class FactCacheServiceImplTest {
 
         val fetchedFact = factCacheService.getCachedFact(fact.id)
         assertNotNull(fetchedFact)
-        assertEquals(fact.id, fetchedFact?.fact?.id)
+        assertEquals(fact.id, fetchedFact.await()?.indefinitely()?.fact?.id)
     }
 }

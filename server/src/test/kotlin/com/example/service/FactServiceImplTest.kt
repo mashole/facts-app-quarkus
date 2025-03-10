@@ -3,7 +3,9 @@ import com.example.client.RemoteFactsClient
 import com.example.model.FactEntityWithStats
 import com.example.service.FactCacheServiceImpl
 import com.example.service.FactServiceImpl
+import io.smallrye.mutiny.Uni
 import jakarta.ws.rs.WebApplicationException
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
@@ -36,22 +38,23 @@ class FactServiceImplTest {
     @Test
     fun `getAndCacheRandomFact should fetch and cache fact`() {
         val factEntity = FactEntity("123", "A random fact", "source", "https://source.com", "en")
-        `when`(remoteFactsClient.getRandomFact()).thenReturn(factEntity)
+        `when`(remoteFactsClient.getRandomFact()).thenReturn(Uni.createFrom().item(factEntity))
 
         val result = factService.getAndCacheRandomFact()
 
 
         assertNotNull(result)
-        assertEquals(factEntity.text, result.text)
+        assertEquals(factEntity.text, result.await().indefinitely()?.text)
         verify(factCacheService, times(1)).cacheFact(factEntity)
     }
 
     @Test
     fun `getAndCacheRandomFact should throw exception when API fails`() {
-        `when`(remoteFactsClient.getRandomFact()).thenThrow(RuntimeException("API Error"))
+        `when`(remoteFactsClient.getRandomFact())
+            .thenReturn(Uni.createFrom().failure(RuntimeException("API Error")))
 
         val exception = assertThrows<WebApplicationException> {
-            factService.getAndCacheRandomFact()
+            factService.getAndCacheRandomFact().await().indefinitely()
         }
 
         assertEquals("Failed to fetch fact from external service", exception.message)
@@ -59,23 +62,26 @@ class FactServiceImplTest {
 
     @Test
     fun `getCachedFact should return cached fact`() {
-        val factEntity = FactEntityWithStats(FactEntity("123", "A random fact", "source", "https://source.com", "en"), 1)
-        `when`(factCacheService.getCachedFact("123")).thenReturn(factEntity)
+        val factEntity = FactEntityWithStats(
+            FactEntity("123", "A random fact", "source", "https://source.com", "en"), 1
+        )
+        `when`(factCacheService.getCachedFact("123")).thenReturn(Uni.createFrom().item(factEntity))
 
         val result = factService.getCachedFact("123")
 
         assertNotNull(result)
-        assertEquals(factEntity.fact.text, result?.text)
+        assertEquals(factEntity.fact.text, result.await()?.indefinitely()?.text)
         verify(factCacheService, times(1)).incrementAccessCount("123")
     }
 
     @Test
     fun `getCachedFact should throw FactNotFoundException when fact is missing`() {
-        `when`(factCacheService.getCachedFact("999")).thenReturn(null)
+        `when`(factCacheService.getCachedFact("999")).thenReturn(Uni.createFrom().nullItem())
 
-        val exception = assertThrows<FactNotFoundException> {
-            factService.getCachedFact("999")
-        }
+        val exception = Assertions.assertThrows(
+            FactNotFoundException::class.java,
+            { factService.getCachedFact("999").await().indefinitely() }
+        )
 
         assertEquals("Fact with ID 999 not found", exception.message)
     }
@@ -88,12 +94,12 @@ class FactServiceImplTest {
             FactEntityWithStats(FactEntity("456", "Fact 2", "source", "https://source.com", "en"), 5)
         )
 
-        `when`(factCacheService.getAllCachedFacts()).thenReturn(facts)
+        `when`(factCacheService.getAllCachedFacts()).thenReturn(Uni.createFrom().item(facts))
 
         val result = factService.getAllCachedFacts()
 
-        assertEquals(2, result.size)
-        assertEquals("Fact 1", result[0].fact.text)
-        assertEquals(5, result[1].accessCount)
+        assertEquals(2, result.await().indefinitely().size)
+        assertEquals("Fact 1", result.await().indefinitely()[0].fact.text)
+        assertEquals(5, result.await().indefinitely()[1].accessCount)
     }
 }

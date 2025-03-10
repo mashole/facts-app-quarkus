@@ -1,6 +1,7 @@
 package com.example.client
 
 import FactEntity
+import io.smallrye.mutiny.Uni
 import jakarta.ws.rs.GET
 import jakarta.ws.rs.Path
 import jakarta.ws.rs.Produces
@@ -13,5 +14,5 @@ interface RemoteFactsClient {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    fun getRandomFact(): FactEntity
+    fun getRandomFact(): Uni<FactEntity>
 }

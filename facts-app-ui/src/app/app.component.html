@@ -1,0 +1,13 @@
+<div class="bg-light min-vh-100">
+  <nav class="d-flex navbar navbar-expand-lg navbar-light bg-light fixed-top justify-content-center pt-2">
+    <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+      <mat-button-toggle class="px-2" checked="{{isActive('/')}}" [routerLink]="['/']">Random</mat-button-toggle>
+      <mat-button-toggle class="px-2" checked="{{isActive('/facts')}}" [routerLink]="['/facts']">Facts
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+    <button mat-button style="position:absolute; right:0;" [routerLink]="['/admin/statistics']">Admin panel</button>
+  </nav>
+  <section class="conent-container">
+    <router-outlet></router-outlet>
+  </section>
+</div>

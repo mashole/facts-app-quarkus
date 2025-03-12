@@ -1,0 +1,12 @@
+<div *ngIf="fact" class="d-flex justify-content-center align-items-center flex-column bg-light h-100">
+  <mat-card appearance="outlined" class="card">
+    <mat-card-header>
+      <mat-card-subtitle class="p-1">Id: {{ fact.id }}</mat-card-subtitle>
+      <mat-card-subtitle class="p-1">Text: {{ fact.text }}</mat-card-subtitle>
+      <mat-card-subtitle class="p-1">Source: {{ fact.source }}</mat-card-subtitle>
+      <mat-card-subtitle class="p-1">SourceUrl: <a href="{{ fact.sourceUrl }}">{{ fact.sourceUrl }}</a></mat-card-subtitle>
+      <mat-card-subtitle class="p-1">PermaLink: <a href="{{fact.permalink}}">{{ fact.permalink }}</a></mat-card-subtitle>
+      <mat-card-subtitle class="p-1">Language: {{ fact.language }}</mat-card-subtitle>
+    </mat-card-header>
+  </mat-card>
+</div>

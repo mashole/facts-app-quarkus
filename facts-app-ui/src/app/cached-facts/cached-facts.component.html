@@ -1,0 +1,7 @@
+<div class="d-flex justify-content-center align-items-center flex-column bg-light h-100">
+  <ul *ngFor="let fact of facts" class="list-unstyled">
+    <li>
+      <app-fact [fact]="fact"></app-fact>
+    </li>
+  </ul>
+</div>

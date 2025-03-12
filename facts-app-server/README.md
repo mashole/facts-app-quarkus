@@ -50,11 +50,15 @@ The project is modular and contains the following core components:
 - **Quarkus CLI** (optional but recommended)
 
 ### Steps
-1. Build the project:
+1. Go to server directory:
+``` bash
+   cd facts-app-server
+```
+2. Build the project:
 ``` bash
    mvn clean package
 ```
-2. Run the application:
+3. Run the application:
 ``` bash
    ./mvnw quarkus:dev
 ```

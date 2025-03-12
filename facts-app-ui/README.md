@@ -6,6 +6,19 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
 
 To start a local development server, run:
 
+go to ui directory
+
+```bash
+cd facts-app-ui   
+```
+install dependencies
+
+```bash
+npm i
+```
+
+then run application
+
 ```bash
 ng serve
 ```

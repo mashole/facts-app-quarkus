@@ -10,8 +10,8 @@
    cd facts-app-quarkus
 ```
 1. Refer to the specific README files for detailed setup and usage instructions:
-    - [UI README](facts-app-ui/README.md): To set up and run the Angular frontend.
     - [Server README](./facts-app-server/README.md): To set up and run the Quarkus backend.
+    - [UI README](facts-app-ui/README.md): To set up and run the Angular frontend.
 
 ## Features
 - Browse random facts through an intuitive user interface.

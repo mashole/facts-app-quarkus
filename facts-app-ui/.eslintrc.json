@@ -22,13 +22,13 @@
       "warn",
       { "vars": "all", "args": "after-used", "ignoreRestSiblings": true }
     ],
-    // Убираем неиспользуемые экспорты с помощью Import
     "import/no-unused-modules": ["warn", { "unusedExports": true }],
-
-    // Добавляем пробелы в фигурных скобках
     "object-curly-spacing": ["error", "always"],
 
-    // Упорядочивание импортов
+    "import/no-unused-modules": ["warn", { "unusedExports": true }],
+
+    "object-curly-spacing": ["error", "always"],
+
     "import/order": [
       "error",
       {
@@ -38,7 +38,6 @@
       }
     ],
 
-    // Остальные правила для форматирования
     "semi": ["error", "always"],
     "quotes": ["error", "single"],
     "indent": ["error", 2]

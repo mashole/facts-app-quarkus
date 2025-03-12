@@ -1,0 +1,7 @@
+<div class="d-flex justify-content-center align-items-center flex-column bg-light h-100">
+    <app-fact *ngIf="fact" [fact]="fact"></app-fact>
+
+    <div class="pt-4">
+        <button mat-raised-button (click)="getFact()">Give me a new fact!</button>
+    </div>
+</div>

@@ -1,0 +1,52 @@
+<mat-form-field style="width:100vw">
+  <mat-label>Filter</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+</mat-form-field>
+
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" matSort style="width:100vw">
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> ID</th>
+      <td mat-cell *matCellDef="let row"> {{ row.fact.id }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="text">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Text</th>
+      <td mat-cell *matCellDef="let row"> {{ row.fact.text }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="source">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Source</th>
+      <td mat-cell *matCellDef="let row"> {{ row.fact.source }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="sourceUrl">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> SourceUrl</th>
+      <td mat-cell *matCellDef="let row"> {{ row.fact.sourceUrl }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="permalink">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Permalink</th>
+      <td mat-cell *matCellDef="let row"> {{ row.fact.permalink }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="language">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Language</th>
+      <td mat-cell *matCellDef="let row"> {{ row.fact.language }}</td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="accessCount">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Access count</th>
+      <td mat-cell *matCellDef="let row"> {{ row.accessCount }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">No data matching the filter "{{ input.value }}"</td>
+    </tr>
+  </table>
+</div>

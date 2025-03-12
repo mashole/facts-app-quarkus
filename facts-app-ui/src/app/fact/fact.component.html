@@ -1,0 +1,9 @@
+<mat-card appearance="outlined" class="card">
+  <mat-card-header>
+    <mat-card-title class="p-1">Did you know that...</mat-card-title>
+    <mat-card-subtitle class="p-1">{{ fact.text }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-actions align="end">
+    <button mat-button [routerLink]="['/fact-details', fact.id]">Learn More</button>
+  </mat-card-actions>
+</mat-card>

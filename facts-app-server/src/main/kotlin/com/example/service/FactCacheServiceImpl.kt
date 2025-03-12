@@ -3,6 +3,7 @@ package com.example.service
 import FactEntity
 import com.example.controller.FactsController
 import com.example.model.FactEntityWithStats
+import com.example.utils.IdShortener
 import io.smallrye.mutiny.Uni
 import jakarta.enterprise.context.ApplicationScoped
 import org.jboss.logging.Logger
@@ -14,13 +15,14 @@ class FactCacheServiceImpl : FactCacheService {
     private val logger: Logger = Logger.getLogger(FactsController::class.java)
 
     override fun cacheFact(fact: FactEntity): Uni<Void> {
-        cache.compute(fact.id) { _, existingFact ->
+        val shortenId: String = IdShortener.shorten(fact.id)
+        cache.compute(shortenId) { _, existingFact ->
             if (existingFact != null) {
                 existingFact.accessCount += 1
                 logger.info("Fact with ID: ${fact.id} already exists, incremented access count to ${existingFact.accessCount}")
                 existingFact
             } else {
-                logger.info("New fact cached with ID: ${fact.id}")
+                logger.info("New fact cached with ID: ${shortenId}")
                 FactEntityWithStats(fact)
             }
         }

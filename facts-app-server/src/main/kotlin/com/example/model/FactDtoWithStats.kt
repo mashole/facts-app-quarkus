@@ -9,14 +9,7 @@ data class FactDtoWithStats (
         fun fromEntity(entity: FactEntityWithStats): FactDtoWithStats {
             requireNotNull(entity.fact) { "Fact entity must not be null" }
             return FactDtoWithStats(
-                FactDto(
-                    id = entity.fact.id,
-                    text = entity.fact.text,
-                    source = entity.fact.source,
-                    sourceUrl = entity.fact.sourceUrl,
-                    permalink = entity.fact.permalink,
-                    language = entity.fact.language,
-                ),
+                FactDto.fromEntity(entity.fact),
                 accessCount = entity.accessCount
             )
         }

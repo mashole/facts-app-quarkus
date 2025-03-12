@@ -1,6 +1,7 @@
 package com.example.service
 
 import FactEntity
+import com.example.utils.IdShortener
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
@@ -33,10 +34,10 @@ class FactCacheServiceImplTest {
     fun `test cacheFact when fact already cached`() {
         factCacheService.cacheFact(fact)
 
-        val accessCountBefore = factCacheService.getCachedFact(fact.id).await()?.indefinitely()?.accessCount
+        val accessCountBefore = factCacheService.getCachedFact(IdShortener.shorten(fact.id)).await()?.indefinitely()?.accessCount
         factCacheService.cacheFact(fact)
 
-        val accessCountAfter = factCacheService.getCachedFact(fact.id).await()?.indefinitely()?.accessCount
+        val accessCountAfter = factCacheService.getCachedFact(IdShortener.shorten(fact.id)).await()?.indefinitely()?.accessCount
         assertNotNull(accessCountAfter)
         assertEquals(accessCountBefore!! + 1, accessCountAfter)
     }
@@ -45,10 +46,10 @@ class FactCacheServiceImplTest {
     fun `test incrementAccessCount`() {
         factCacheService.cacheFact(fact)
 
-        val accessCountBefore = factCacheService.getCachedFact(fact.id).await()?.indefinitely()?.accessCount
-        factCacheService.incrementAccessCount(fact.id)
+        val accessCountBefore = factCacheService.getCachedFact(IdShortener.shorten(fact.id)).await()?.indefinitely()?.accessCount
+        factCacheService.incrementAccessCount(IdShortener.shorten(fact.id))
 
-        val accessCountAfter = factCacheService.getCachedFact(fact.id).await()?.indefinitely()?.accessCount
+        val accessCountAfter = factCacheService.getCachedFact(IdShortener.shorten(fact.id)).await()?.indefinitely()?.accessCount
         assertNotNull(accessCountAfter)
         assertEquals(accessCountBefore!! + 1, accessCountAfter)
     }
@@ -67,7 +68,7 @@ class FactCacheServiceImplTest {
     fun `test getCachedFact`() {
         factCacheService.cacheFact(fact)
 
-        val fetchedFact = factCacheService.getCachedFact(fact.id)
+        val fetchedFact = factCacheService.getCachedFact(IdShortener.shorten(fact.id))
         assertNotNull(fetchedFact)
         assertEquals(fact.id, fetchedFact.await()?.indefinitely()?.fact?.id)
     }
